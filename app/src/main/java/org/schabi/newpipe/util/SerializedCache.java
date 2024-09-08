@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.LruCache;
+import static io.github.pixee.security.ObjectInputFilters.createSafeObjectInputStream;
 
 import org.schabi.newpipe.MainActivity;
 
@@ -103,8 +104,7 @@ public final class SerializedCache {
             objectOutput.writeObject(item);
             objectOutput.flush();
         }
-        final Object clone = new ObjectInputStream(
-                new ByteArrayInputStream(bytesOutput.toByteArray())).readObject();
+        final Object clone = createSafeObjectInputStream(new ByteArrayInputStream(bytesOutput.toByteArray())).readObject();
         return type.cast(clone);
     }
 

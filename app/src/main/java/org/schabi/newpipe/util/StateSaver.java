@@ -28,6 +28,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.BundleCompat;
+import io.github.pixee.security.ObjectInputFilters;
 
 import org.schabi.newpipe.BuildConfig;
 import org.schabi.newpipe.MainActivity;
@@ -130,7 +131,8 @@ public final class StateSaver {
 
             try (FileInputStream fileInputStream = new FileInputStream(file);
                  ObjectInputStream inputStream = new ObjectInputStream(fileInputStream)) {
-                //noinspection unchecked
+                
+                ObjectInputFilters.enableObjectFilterIfUnprotected(inputStream);
                 savedObjects = (Queue<Object>) inputStream.readObject();
             }
 
