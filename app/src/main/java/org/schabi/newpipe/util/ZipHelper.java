@@ -1,5 +1,6 @@
 package org.schabi.newpipe.util;
 
+import io.github.pixee.security.ZipSecurity;
 import org.schabi.newpipe.streams.io.SharpInputStream;
 import org.schabi.newpipe.streams.io.StoredFileHelper;
 
@@ -154,7 +155,7 @@ public final class ZipHelper {
                                              final String nameInZip,
                                              final InputStreamConsumer streamConsumer)
             throws IOException {
-        try (ZipInputStream inZip = new ZipInputStream(new BufferedInputStream(
+        try (ZipInputStream inZip = ZipSecurity.createHardenedInputStream(new BufferedInputStream(
                 new SharpInputStream(zipFile.getStream())))) {
             ZipEntry ze;
             while ((ze = inZip.getNextEntry()) != null) {
@@ -175,7 +176,7 @@ public final class ZipHelper {
      */
     public static boolean zipContainsFile(final StoredFileHelper zipFile, final String fileInZip)
             throws Exception {
-        try (ZipInputStream inZip = new ZipInputStream(new BufferedInputStream(
+        try (ZipInputStream inZip = ZipSecurity.createHardenedInputStream(new BufferedInputStream(
                 new SharpInputStream(zipFile.getStream())))) {
             ZipEntry ze;
 
@@ -189,7 +190,7 @@ public final class ZipHelper {
     }
 
     public static boolean isValidZipFile(final StoredFileHelper file) {
-        try (ZipInputStream ignored = new ZipInputStream(new BufferedInputStream(
+        try (ZipInputStream ignored = ZipSecurity.createHardenedInputStream(new BufferedInputStream(
                 new SharpInputStream(file.getStream())))) {
             return true;
         } catch (final IOException ioe) {
